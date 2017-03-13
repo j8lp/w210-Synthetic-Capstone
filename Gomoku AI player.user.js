@@ -17,15 +17,6 @@ function extendFunction(t,f_orig,f_extend){
     };
 }
 
-function initPlaySoundListener(){
-    this.removeEventListener("play",initPlaySoundListener,true);
-    if (typeof gameui === "undefined") {
-        return;
-    }
-    gamedatas_clone = JSON.parse(JSON.stringify(gameui.gamedatas));
-    gameui.notifqueue.onNotification = extendFunction(gameui.notifqueue,gameui.notifqueue.onNotification,handleLog);
-    myTurn();
-}
 
 
 function handleLog(log_entry){
