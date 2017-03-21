@@ -2,9 +2,9 @@ chrome.tabs.onUpdated.addListener(function(id, info, tab){
 
     console.log(tab)
     var url = tab.url
-    var isBGA = url.includes("boardgamearena.com/")
+    var isBGA = url.includes("boardgamearena.com/gomoku")
     if (isBGA){
-        chrome.browserAction.setPopup({tabId:id, popup:""})
+        chrome.browserAction.setPopup({tabId:id, popup:"popup.html"})
         chrome.browserAction.setIcon({tabId:id, path:"icons/icon_enabled.png"})
     } else{
         chrome.browserAction.setPopup({tabId:id, popup:"popup_inactive.html"})

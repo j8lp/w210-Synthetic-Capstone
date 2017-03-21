@@ -13,10 +13,12 @@ var code = function(){
 var gamedatas_clone;
 
 function extendFunction(t,f_orig,f_extend){
-    return function(){
+    var f = function(){
         f_orig.apply(t,arguments);
         f_extend.apply(t,arguments);
     };
+    f.orig = f_orig;
+    return f;
 }
 
 
@@ -369,7 +371,7 @@ function updateClone(eventType,args){
     gameui.notifqueue.onNotification = extendFunction(gameui.notifqueue,gameui.notifqueue.onNotification,handleLog);
     myTurn();
     };
-    //Run script after 5 sseconds.  It's a hack, but will fix later
+    //Run script after 5 seconds.  It's a hack, but will fix later
     window.setTimeout(function(){
 
 
