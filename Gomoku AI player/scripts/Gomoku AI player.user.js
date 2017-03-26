@@ -7,9 +7,28 @@
 // @grant        none
 // @run-at document-end
 // ==/UserScript==
+
+
+
+
+
+
 (function() {
         'use strict';
+var htmlToInject = '';
+
+htmlToInject += '<div style="position:fixed; bottom:0; height:60; margin-left: auto; margin-right: auto; max-width: 1100; z-index:26; user-select:none; width:100%;">';
+    htmlToInject += '<div id="ai_message_container" style="text-align: center; padding: 20px 0;  text-transform: uppercase; background-color: rgb(159,221,158);"><h></h></div>';
+htmlToInject += '</div>';
+
+var gomokuMsg = document.createElement("div");
+gomokuMsg.innerHTML = htmlToInject;
+document.getElementsByTagName('body')[0].appendChild(gomokuMsg);
+var message_container = document.getElementById("ai_message_container")
+message_container.innerText = "AI is loading..."
+
 var code = function(){
+var message_container = document.getElementById("ai_message_container")
 var gamedatas_clone;
 
 function extendFunction(t,f_orig,f_extend){
@@ -59,6 +78,8 @@ function myTurn(){
         alert("gameui is null");
     } else{
         if(gameui.getActivePlayerId() == gameui.player_id){
+            message_container.innerText = "AI running"
+
             var xhr = new XMLHttpRequest();
             var game_name = gameui.game_name;
             var action = "playStone";
@@ -76,10 +97,11 @@ function myTurn(){
                 console.log(arguments);
             });
 
-        }
+        } 
     }
 
 }
+
 
 
 function colorToHex(color) {
@@ -100,6 +122,36 @@ function colorToHex(color) {
         function(idx) { return ('0'+rgba[idx].toString(16)).slice(-2); }
     ).join('');
     return "#"+hex;
+}
+
+
+function data_transform_to_model_binary(){
+    var playercolor = "#" + gamedatas_clone.players[gameui.player_id].color;
+    var data_transform_stone =  function(stone){
+        if (!stone.stone_color)  return 0;
+        var stonecolor = colorToHex(stone.stone_color);
+        if (stonecolor === playercolor) return 1;
+        return 2;};
+
+    var stones_1 = [];
+    var stones_2 = [];
+
+    for (var i in gamedatas_clone.intersections){
+        var stone = gamedatas_clone.intersections[i];
+        var value = data_transform_stone(stone);
+        stones_1[i] = 0;
+        stones_2[i] = 0;
+        if (value == 1){
+            stones_1[i] = 1;
+        };
+        if (value == 2){
+            stones_2[i] = 1;
+        };
+    }
+    console.log(stones);
+    return stones;
+
+
 }
 
 // The above returns "rgb(R, G, B)" on IE9/Chrome20/Firefox1
@@ -139,10 +191,34 @@ function data_transform_to_model(){
 
 }
 
+function data_transform_from_model_q(q) {
+    var m = Math.max(q);
+    var i = q.indexOf(m);
+    return gamedatas_clone.intersections[i];
+}
+
 function data_transform_from_model(i) {
     return gamedatas_clone.intersections[i];
 }
 
+
+function computer_move_q(){
+
+
+    var i, j, k, l, m, n, position, type, line, total_cells, consecutive_cells, empty_sides, best_score,
+        cell_score, direction_score, score;
+
+    var board_size = 19;
+    var board = data_transform_to_model();
+    var  inputData = {
+      'input_1': new Float32Array(board)
+    }
+
+
+}
+
+
+//function to make move in case model fails
 function computer_move() {
 
     var i, j, k, l, m, n, position, type, line, total_cells, consecutive_cells, empty_sides, best_score,
@@ -363,12 +439,12 @@ function updateClone(eventType,args){
     }
 }
 
-
     if (!gameui) {
         return;
     }
     gamedatas_clone = JSON.parse(JSON.stringify(gameui.gamedatas));
     gameui.notifqueue.onNotification = extendFunction(gameui.notifqueue,gameui.notifqueue.onNotification,handleLog);
+    message_container.innerText = "AI running"
     myTurn();
     };
     //Run script after 5 seconds.  It's a hack, but will fix later

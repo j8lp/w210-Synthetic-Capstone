@@ -5,21 +5,13 @@
     "default_title" : "My exntesion",
     "default_popup": "popup_inactive.html"
   },
-"background": {
-    "scripts": ["scripts/BGAEvent.js"],
-    "persistent": true
-  },
-"permissions":[
-"tabs"
-],
-
 
 
     "content_scripts": [ {
         "exclude_globs":    [  ],
         "include_globs":    [ "*" ],
-        "js":               [ "scripts/Gomoku AI player.user.js" ],
-        "matches":          [   "https://*.boardgamearena.com/gomoku*"],
+        "js":               [  "scripts/Gomoku AI player.user.js" ],
+        "matches":          [  "https://*.boardgamearena.com/*"],
         "run_at": "document_end"
     } ],
     "converted_from_user_script": true,

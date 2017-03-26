@@ -20,10 +20,37 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="skin/popup.css">
 
+  <script src="popup.js"></script>
 </head>
 <!-- Set tabindex to work around Chromium issue 304532 -->
 <body tabindex="1">
-Gomoku AI is running
+
+<header>
+</header>
+
+  <ul id="menu">
+    <li id="enabled" class="menu-item" role="button">
+      <div class="icon"></div>
+
+      <span id="enabled-no" class="i18n_disabled_for_site">
+                <strong>Disabled</strong>
+
+      </span>
+            <span id="enabled-yes" class="i18n_enabled_for_site">
+        <strong>Enabled</strong>
+
+      </span> 
+    </li>
+
+    <li id="clickhide" class="menu-item" role="button">
+      <div class="icon"></div>
+      <span></span>
+      <span class="i18n_disabled_for_site"></span>
+
+    </li>
+  </ul>
+</div>
 </body>
 </html>

@@ -1,6 +1,4 @@
 chrome.tabs.onUpdated.addListener(function(id, info, tab){
-
-    console.log(tab)
     var url = tab.url
     var isBGA = url.includes("boardgamearena.com/gomoku")
     if (isBGA){
