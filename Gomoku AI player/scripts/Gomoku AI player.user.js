@@ -17,15 +17,15 @@
         'use strict';
 var htmlToInject = '';
 
-htmlToInject += '<div style="position:fixed; bottom:0; height:60; margin-left: auto; margin-right: auto; max-width: 1100; z-index:26; user-select:none; width:100%;">';
-    htmlToInject += '<div id="ai_message_container" style="text-align: center; padding: 20px 0;  text-transform: uppercase; background-color: rgb(159,221,158);"><h></h></div>';
+htmlToInject += '<div style="position:fixed; bottom:0; margin-left: auto; margin-right: auto; z-index:26; user-select:none; width:100%;">';
+    htmlToInject += '<div id="ai_message_container" style="text-align: center; font-weight:bold; padding: 15px 0;  text-transform: uppercase; background-color: grey"></div>';
 htmlToInject += '</div>';
 
 var gomokuMsg = document.createElement("div");
 gomokuMsg.innerHTML = htmlToInject;
 document.getElementsByTagName('body')[0].appendChild(gomokuMsg);
 var message_container = document.getElementById("ai_message_container")
-message_container.innerText = "AI is loading..."
+message_container.innerText = "AI Loading..."
 
 var code = function(){
 var message_container = document.getElementById("ai_message_container")
@@ -78,7 +78,8 @@ function myTurn(){
         alert("gameui is null");
     } else{
         if(gameui.getActivePlayerId() == gameui.player_id){
-            message_container.innerText = "AI running"
+            message_container.innerText = "AI Running";
+            message_container.style.backgroundColor = "rgb(159,221,158)";
 
             var xhr = new XMLHttpRequest();
             var game_name = gameui.game_name;
@@ -88,16 +89,23 @@ function myTurn(){
             console.log("sending args");
             console.log(args);
             var response = gameui.ajaxcall(gameURL,args,
-                                           this,function(){
-                console.log("Error");
-                console.log(arguments);
-            }, function() {
+                                           this,function(){}, function() {
                 console.log("Success");
+                            message_container.innerText = "AI Ready";
 
-                console.log(arguments);
             });
 
-        } 
+        } else{
+//Remove AI 
+if (!(gameui.player_id in gameui.players_metadata)){
+            message_container.innerText = "AI Inactive";
+
+            message_container.style.backgroundColor = "white";
+
+}
+
+
+        }
     }
 
 }
@@ -444,7 +452,10 @@ function updateClone(eventType,args){
     }
     gamedatas_clone = JSON.parse(JSON.stringify(gameui.gamedatas));
     gameui.notifqueue.onNotification = extendFunction(gameui.notifqueue,gameui.notifqueue.onNotification,handleLog);
-    message_container.innerText = "AI running"
+    message_container.innerText = "AI Ready"
+    message_container.style.backgroundColor = "rgb(159,221,158)";
+
+
     myTurn();
     };
     //Run script after 5 seconds.  It's a hack, but will fix later
